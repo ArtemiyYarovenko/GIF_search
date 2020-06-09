@@ -36,7 +36,7 @@ public class Main
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.gallery_activity);
+        setContentView(R.layout.main);
 
         bt = findViewById(R.id.bt);
         bto = findViewById(R.id.bto);
