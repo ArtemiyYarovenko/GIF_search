@@ -8,13 +8,19 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 public interface Retrofit_Caller {
-    @GET("gifs/trending?api_key=lkrJDzDTVXJtbt8lPVphAMKC05nGDLji")
+    @GET("gifs/trending?")
     Call<Response2>
-    getRecent(@Query("limit") String given_limit, @Query("rating") String given_rating);
+    getRecent(@Query("api_key") String given_api_key,
+              @Query("limit") String given_limit,
+              @Query("rating") String given_rating);
 
     // Разобраться с retorfit диннамическими запросами (либо на прямую строить url из приложения, тут подумать надо)
-    @GET("gifs/search?api_key=lkrJDzDTVXJtbt8lPVphAMKC05nGDLji&q={keyword}&limit=120&offset=0&rating=G&lang=en")
+    @GET("gifs/search?")
     Call<Response2>
-    getSearchPhotos(@Query("text") String keyWord );
+    getSearchPhotos(@Query("api_key") String given_api_key,
+                    @Query("q") String keyWord,
+                    @Query("limit") String given_limit,
+                    @Query("offset") String given_offset,
+                    @Query("rating") String given_rating);
 }
 

@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">GIF_search</string>
-    <string name="load_images">Загрузить изображения</string>
+    <string name="load_images">Load</string>
+    <string name="hint_search">Type here</string>
 </resources>

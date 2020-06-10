@@ -27,4 +27,5 @@ public class DB_Application
     public GIF_DB getDatabase() {
         return GIF_DB.getDatabase(getApplicationContext());
     }
+
 }

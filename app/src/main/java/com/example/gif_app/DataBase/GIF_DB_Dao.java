@@ -10,7 +10,7 @@ import com.Object.Datum;
 
 import java.util.List;
 
-//Расскоментировать, когда будут дописаны конвертеры для сложных типов данных
+
 @Dao
 public interface GIF_DB_Dao {
     @Query("SELECT * FROM Datum")
@@ -19,10 +19,10 @@ public interface GIF_DB_Dao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public void
-   insertGif(Datum gif);
+    insertGif(Datum gif);
 
     @Delete
     public void
- deleteGif(Datum gif);
+    deleteGif(Datum gif);
 
 }

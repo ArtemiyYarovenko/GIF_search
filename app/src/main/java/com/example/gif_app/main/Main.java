@@ -2,12 +2,14 @@ package com.example.gif_app.main;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.Object.Datum;
 import com.Object.Response2;
@@ -19,18 +21,24 @@ import com.example.gif_app.main.RV_Adapter.Gif_Adapter;
 import com.example.gif_app.main.RV_Adapter.Gif_Adapter_2;
 
 
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+
+
 public class Main
         extends AppCompatActivity
         implements Gif_Adapter.OnInsertListener {
 
+    private static final String api_key = "lkrJDzDTVXJtbt8lPVphAMKC05nGDLji";
+
     private GIF_DB DataBase;
-    Button bt; // кнопка для загрузки базы данных
-    Button bto; // кнопка загрузки онлайн
+    private EditText search_keyword;
+    Button button_from_database; // кнопка для загрузки базы данных
+    Button button_from_online; // кнопка загрузки онлайн
     int SpanCount; // кол-во столбцов в Recycler view (планировалось сделать настройки, чтобы выбирать
                     //способ отображения (сколько стобцов, какие по размеру изображения загружать и.т.д)
 
@@ -39,24 +47,27 @@ public class Main
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        bt = findViewById(R.id.bt);
-        bto = findViewById(R.id.bto);
-        final RecyclerView rv = findViewById(R.id.rv);
+        button_from_database = findViewById(R.id.load_local);
+        button_from_online = findViewById(R.id.load_online);
+        search_keyword = findViewById(R.id.search_input);
+
+        final RecyclerView recycler_view = findViewById(R.id.rv);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+        recycler_view.setLayoutManager(gridLayoutManager);
 
 
-        rv.setLayoutManager(new GridLayoutManager(this, 2));
-
-        DataBase = GIF_DB.getDatabase(getApplicationContext());
+        DataBase = GIF_DB.getDatabase(this);
 
         View.OnClickListener clbt = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Gif_Adapter_2 pa = new Gif_Adapter_2(this, DataBase.getGifDao().LoadAll());
-                rv.setAdapter(pa);
+                Gif_Adapter_2 recycler_view_adapter = new Gif_Adapter_2(this, DataBase.getGifDao().LoadAll());
+                recycler_view.setAdapter(recycler_view_adapter);
             }
         };
 
-        bt.setOnClickListener(clbt);
+        button_from_database.setOnClickListener(clbt);
 
 
         View.OnClickListener clbto = new View.OnClickListener() {
@@ -64,18 +75,21 @@ public class Main
             public void onClick(View v) {
                 Retrofit r = Retrofit_Item.getRetrofit();
                 String limit = "50";
-                String rating = "G";
+                String rating = "R";
+                String offset = "0";
+                String q = search_keyword.getText().toString();
+
                 r.create(Retrofit_Caller.class)
-                        .getRecent(limit, rating)
+                        .getSearchPhotos(api_key, q, limit, offset, rating)
                         .enqueue(new Callback<Response2>() {
 
                     @Override
                     public void onResponse(Call<Response2> call, Response<Response2> response) {
                         response.body();
-                    //  Log.e("b", String.valueOf((((Response2) response.body()).getPagination().getCount()))); Лог для проверки запрсоа
+                    //  Log.e("test_request", String.valueOf((((Response2) response.body()).getPagination().getCount()))); Лог для проверки запрсоа
                         Gif_Adapter pa = new Gif_Adapter(this, response.body().getData());
                         pa.setOnInsertListener(Main.this);
-                        rv.setAdapter(pa);
+                        recycler_view.setAdapter(pa);
                     }
 
                     @Override
@@ -84,9 +98,10 @@ public class Main
                 });
             }
         };
-        bto.setOnClickListener(clbto);
-
+        button_from_online.setOnClickListener(clbto);
     }
+
+
 
 
     @Override
