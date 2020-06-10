@@ -1,4 +1,4 @@
-/* package com.example.gif_app.DataBase;
+ package com.example.gif_app.DataBase;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -10,7 +10,7 @@ import com.Object.Datum;
 
 import java.util.List;
 
-Расскоментировать, когда будут дописаны конвертеры для сложных типов данных
+//Расскоментировать, когда будут дописаны конвертеры для сложных типов данных
 @Dao
 public interface GIF_DB_Dao {
     @Query("SELECT * FROM Datum")
@@ -25,4 +25,4 @@ public interface GIF_DB_Dao {
     public void
  deleteGif(Datum gif);
 
-} */
+}

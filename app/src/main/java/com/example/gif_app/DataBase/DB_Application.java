@@ -1,4 +1,4 @@
-/*package com.example.gif_app.DataBase;
+package com.example.gif_app.DataBase;
 
 import android.app.Application;
 
@@ -27,4 +27,4 @@ public class DB_Application
     public GIF_DB getDatabase() {
         return GIF_DB.getDatabase(getApplicationContext());
     }
-} */
+}

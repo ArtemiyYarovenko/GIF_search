@@ -1,9 +1,9 @@
 package com.Object;
 
 
-//import androidx.annotation.NonNull;
-//import androidx.room.Entity;
-//import androidx.room.PrimaryKey;
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -11,7 +11,7 @@ import com.google.gson.annotations.SerializedName;
 // Для хранения сохранненых gif-изображений раскомментировать!
 // Пока не работает, Cannot figure out how to save this field into database. You can consider adding a type converter for it.
 // Надо дописать конвертеры для сложных типов( Images, Abstraction, и вложенным в них сложным типам)
-//@Entity
+@Entity
 public class Datum {
 
 @SerializedName("type")
@@ -20,8 +20,8 @@ private String type;
 
 @SerializedName("id")
 @Expose
-//@PrimaryKey
-//@NonNull
+@PrimaryKey
+@NonNull
 private String id;
 
 @SerializedName("url")

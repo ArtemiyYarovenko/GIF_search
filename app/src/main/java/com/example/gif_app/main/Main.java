@@ -14,8 +14,9 @@ import com.Object.Response2;
 import com.example.gif_app.R;
 import com.example.gif_app.api.Retrofit_Item;
 import com.example.gif_app.api.Retrofit_Caller;
-// import com.example.gif_app.DataBase.GIF_DB;
+import com.example.gif_app.DataBase.GIF_DB;
 import com.example.gif_app.main.RV_Adapter.Gif_Adapter;
+import com.example.gif_app.main.RV_Adapter.Gif_Adapter_2;
 
 
 import retrofit2.Call;
@@ -27,7 +28,7 @@ public class Main
         extends AppCompatActivity
         implements Gif_Adapter.OnInsertListener {
 
-//    private GIF_DB DataBase;
+    private GIF_DB DataBase;
     Button bt; // кнопка для загрузки базы данных
     Button bto; // кнопка загрузки онлайн
     int SpanCount; // кол-во столбцов в Recycler view (планировалось сделать настройки, чтобы выбирать
@@ -45,13 +46,13 @@ public class Main
 
         rv.setLayoutManager(new GridLayoutManager(this, 2));
 
-//        DataBase = GIF_DB.getDatabase(getApplicationContext());
+        DataBase = GIF_DB.getDatabase(getApplicationContext());
 
         View.OnClickListener clbt = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-        //        PhotoAdapter2 pa = new PhotoAdapter2(this, DataBase.getGifDao().LoadAll());
-        //        rv.setAdapter(pa);
+                Gif_Adapter_2 pa = new Gif_Adapter_2(this, DataBase.getGifDao().LoadAll());
+                rv.setAdapter(pa);
             }
         };
 
@@ -62,9 +63,10 @@ public class Main
             @Override
             public void onClick(View v) {
                 Retrofit r = Retrofit_Item.getRetrofit();
-                String qwerty = "50";
+                String limit = "50";
+                String rating = "G";
                 r.create(Retrofit_Caller.class)
-                        .getRecent()
+                        .getRecent(limit, rating)
                         .enqueue(new Callback<Response2>() {
 
                     @Override
@@ -89,7 +91,7 @@ public class Main
 
     @Override
     public void onInsert(Datum datum) {
-//        DataBase.getGifDao().insertPhoto(datum);
+        DataBase.getGifDao().insertGif(datum);
     }
 
     //Хотел подумать насчет intenta, чтобы при перевороте на ландшафтный дизайн перезагружались загруженные gif-ки,

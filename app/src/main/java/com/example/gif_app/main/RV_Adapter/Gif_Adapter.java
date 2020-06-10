@@ -45,8 +45,7 @@ public class Gif_Adapter
     public void onBindViewHolder(ViewHolder holder, int position) {
         String s;
         s = values.get(position).getImages().getFixedHeight().getUrl();
-      // Picasso.get().load(s).into(holder.image);
-       Glide.with(holder.image.getContext()).asGif().load(s).into(holder.image);
+        Glide.with(holder.image.getContext()).asGif().load(s).into(holder.image);
         holder.itemView.setTag(values.get(position));
 
     }
@@ -73,7 +72,7 @@ public class Gif_Adapter
             image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-  //                  onInsertListener.onInsert(values.get(ViewHolder.this.getAdapterPosition()));
+                    onInsertListener.onInsert(values.get(ViewHolder.this.getAdapterPosition()));
                     Toast toast = Toast.makeText(view.getContext(), "База данных временно не работает", LENGTH_SHORT);
                     toast.show();
                 }
