@@ -5,7 +5,7 @@ import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Response2 {
+public class API_Response {
 
     @SerializedName("data")
     @Expose
@@ -25,7 +25,7 @@ public class Response2 {
         this.data = data;
     }
 
-    public Response2 withData(List<Datum> data) {
+    public API_Response withData(List<Datum> data) {
         this.data = data;
         return this;
     }
@@ -38,7 +38,7 @@ public class Response2 {
         this.pagination = pagination;
     }
 
-    public Response2 withPagination(Pagination pagination) {
+    public API_Response withPagination(Pagination pagination) {
         this.pagination = pagination;
         return this;
     }
@@ -51,7 +51,7 @@ public class Response2 {
         this.meta = meta;
     }
 
-    public Response2 withMeta(Meta meta) {
+    public API_Response withMeta(Meta meta) {
         this.meta = meta;
         return this;
     }

@@ -62,7 +62,7 @@ public class Gif_Adapter_2
 
         ViewHolder(View view) {
             super(view);
-            image = view.findViewById(R.id.iv);
+            image = view.findViewById(R.id.gif_view);
         }
     }
 

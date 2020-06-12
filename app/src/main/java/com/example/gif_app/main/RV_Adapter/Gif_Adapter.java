@@ -1,43 +1,38 @@
 package com.example.gif_app.main.RV_Adapter;
 
 import androidx.recyclerview.widget.RecyclerView;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import com.Object.Datum;
-import com.Object.Response2;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.gif_app.R;
 
 
 import java.util.List;
 
-import retrofit2.Callback;
+
 
 import static android.widget.Toast.LENGTH_SHORT;
 
 
 public class Gif_Adapter
         extends RecyclerView.Adapter <Gif_Adapter.ViewHolder>{
-    private final Callback<Response2> Parent;
     private final List<Datum> values;
     private OnInsertListener onInsertListener;
 
-    public Gif_Adapter(Callback<Response2> parent, List<Datum> items) {
-        Parent = parent;
+    public Gif_Adapter(List<Datum> items) {
         values = items;
-
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item, parent, false);
-
         return new ViewHolder(view);
     }
 
@@ -52,6 +47,8 @@ public class Gif_Adapter
                 .with(holder.image.getContext())
                 .asGif()
                 .load(s)
+                .thumbnail(0.5f)
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .into(holder.image);
         holder.itemView.setTag(values.get(position));
 
@@ -72,10 +69,9 @@ public class Gif_Adapter
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         final ImageView image;
-
         ViewHolder(View view) {
             super(view);
-            image = view.findViewById(R.id.iv);
+            image = view.findViewById(R.id.gif_view);
             image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

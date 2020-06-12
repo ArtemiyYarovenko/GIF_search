@@ -12,7 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.Object.Datum;
-import com.Object.Response2;
+import com.Object.API_Response;
 import com.example.gif_app.R;
 import com.example.gif_app.api.Retrofit_Item;
 import com.example.gif_app.api.Retrofit_Caller;
@@ -21,6 +21,7 @@ import com.example.gif_app.main.RV_Adapter.Gif_Adapter;
 import com.example.gif_app.main.RV_Adapter.Gif_Adapter_2;
 
 
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,12 +40,14 @@ public class Main
     String offset = "0";
     int SpanCount = 2;
     Retrofit retrofit;
+    private List<Datum> list;
 
     RecyclerView recycler_view;
     private GIF_DB DataBase;
     private EditText search_keyword;
-    Button button_from_database; // кнопка для загрузки базы данных
-    Button button_from_online; // кнопка загрузки онлайн
+    Button button_from_database;
+    Button button_from_online;
+    Gif_Adapter gif_adapter;
 
 
     @Override
@@ -63,10 +66,12 @@ public class Main
         gridLayoutManager.setItemPrefetchEnabled(true);
         gridLayoutManager.setInitialPrefetchItemCount(6);
 
+
         recycler_view.setLayoutManager(gridLayoutManager);
 
         DataBase = GIF_DB.getDatabase(this);
         retrofit = Retrofit_Item.getRetrofit();
+
 
         View.OnClickListener click_button_load_db = new View.OnClickListener() {
             @Override
@@ -83,31 +88,33 @@ public class Main
             @Override
             public void onClick(View v) {
                 String q = search_keyword.getText().toString();
+                make_call(q);
 
-                retrofit.create(Retrofit_Caller.class)
-                        .getSearchPhotos(api_key, q, limit, offset, rating)
-                        .enqueue(new Callback<Response2>() {
+            }
+        };
+        button_from_online.setOnClickListener(click_button_load_online);
+    }
+
+    public void make_call(String q) {
+        retrofit.create(Retrofit_Caller.class)
+                .getSearchPhotos(api_key, q, limit, offset, rating)
+                .enqueue(new Callback<API_Response>() {
 
                     @Override
-                    public void onResponse(Call<Response2> call, Response<Response2> response) {
-                        response.body();
-                    //  Log.e("test_request", String.valueOf((((Response2) response.body()).getPagination().getCount()))); Лог для проверки запрсоа
-                        Gif_Adapter gif_adapter = new Gif_Adapter(this, response.body().getData());
+                    public void onResponse(Call<API_Response> call, Response<API_Response> response) {
+                        assert response.body() != null;
+                        list = response.body().getData();
+                        gif_adapter = new Gif_Adapter( response.body().getData());
                         gif_adapter.setOnInsertListener(Main.this);
                         recycler_view.setAdapter(gif_adapter);
 
                     }
 
                     @Override
-                    public void onFailure(Call<Response2> call, Throwable t) {
+                    public void onFailure(Call<API_Response> call, Throwable t) {
                     }
                 });
-            }
-        };
-        button_from_online.setOnClickListener(click_button_load_online);
     }
-
-
 
 
     @Override
