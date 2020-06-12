@@ -16,6 +16,7 @@ import com.example.gif_app.R;
 import java.util.List;
 
 
+import pl.droidsonroids.gif.GifImageView;
 
 import static android.widget.Toast.LENGTH_SHORT;
 
@@ -41,10 +42,10 @@ public class Gif_Adapter
         String s = values
                 .get(position)
                 .getImages()
-                .getFixedHeight()
+                .getDownsized()
                 .getUrl();
         Glide
-                .with(holder.image.getContext())
+                .with(holder.itemView)
                 .asGif()
                 .load(s)
                 .thumbnail(0.5f)
@@ -68,7 +69,7 @@ public class Gif_Adapter
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        final ImageView image;
+        GifImageView image;
         ViewHolder(View view) {
             super(view);
             image = view.findViewById(R.id.gif_view);
