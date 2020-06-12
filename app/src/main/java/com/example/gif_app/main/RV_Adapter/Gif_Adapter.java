@@ -43,9 +43,16 @@ public class Gif_Adapter
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String s;
-        s = values.get(position).getImages().getFixedHeight().getUrl();
-        Glide.with(holder.image.getContext()).asGif().load(s).into(holder.image);
+        String s = values
+                .get(position)
+                .getImages()
+                .getFixedHeight()
+                .getUrl();
+        Glide
+                .with(holder.image.getContext())
+                .asGif()
+                .load(s)
+                .into(holder.image);
         holder.itemView.setTag(values.get(position));
 
     }
@@ -73,7 +80,7 @@ public class Gif_Adapter
                 @Override
                 public void onClick(View view) {
                     onInsertListener.onInsert(values.get(ViewHolder.this.getAdapterPosition()));
-                    Toast toast = Toast.makeText(view.getContext(), "База данных временно не работает", LENGTH_SHORT);
+                    Toast toast = Toast.makeText(view.getContext(), "Загруженко в БД", LENGTH_SHORT);
                     toast.show();
                 }
             });

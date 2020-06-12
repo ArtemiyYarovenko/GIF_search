@@ -34,13 +34,18 @@ public class Main
         implements Gif_Adapter.OnInsertListener {
 
     private static final String api_key = "lkrJDzDTVXJtbt8lPVphAMKC05nGDLji";
+    String limit = "50";
+    String rating = "R";
+    String offset = "0";
+    int SpanCount = 2;
+    Retrofit retrofit;
 
+    RecyclerView recycler_view;
     private GIF_DB DataBase;
     private EditText search_keyword;
     Button button_from_database; // кнопка для загрузки базы данных
     Button button_from_online; // кнопка загрузки онлайн
-    int SpanCount; // кол-во столбцов в Recycler view (планировалось сделать настройки, чтобы выбирать
-                    //способ отображения (сколько стобцов, какие по размеру изображения загружать и.т.д)
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,16 +55,20 @@ public class Main
         button_from_database = findViewById(R.id.load_local);
         button_from_online = findViewById(R.id.load_online);
         search_keyword = findViewById(R.id.search_input);
+        recycler_view = findViewById(R.id.recycler_view_main);
 
-        final RecyclerView recycler_view = findViewById(R.id.rv);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, SpanCount);
+        gridLayoutManager.setItemPrefetchEnabled(true);
+        gridLayoutManager.setInitialPrefetchItemCount(6);
+
         recycler_view.setLayoutManager(gridLayoutManager);
 
-
         DataBase = GIF_DB.getDatabase(this);
+        retrofit = Retrofit_Item.getRetrofit();
 
-        View.OnClickListener clbt = new View.OnClickListener() {
+        View.OnClickListener click_button_load_db = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Gif_Adapter_2 recycler_view_adapter = new Gif_Adapter_2(this, DataBase.getGifDao().LoadAll());
@@ -67,19 +76,15 @@ public class Main
             }
         };
 
-        button_from_database.setOnClickListener(clbt);
+        button_from_database.setOnClickListener(click_button_load_db);
 
 
-        View.OnClickListener clbto = new View.OnClickListener() {
+        View.OnClickListener click_button_load_online = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Retrofit r = Retrofit_Item.getRetrofit();
-                String limit = "50";
-                String rating = "R";
-                String offset = "0";
                 String q = search_keyword.getText().toString();
 
-                r.create(Retrofit_Caller.class)
+                retrofit.create(Retrofit_Caller.class)
                         .getSearchPhotos(api_key, q, limit, offset, rating)
                         .enqueue(new Callback<Response2>() {
 
@@ -87,9 +92,10 @@ public class Main
                     public void onResponse(Call<Response2> call, Response<Response2> response) {
                         response.body();
                     //  Log.e("test_request", String.valueOf((((Response2) response.body()).getPagination().getCount()))); Лог для проверки запрсоа
-                        Gif_Adapter pa = new Gif_Adapter(this, response.body().getData());
-                        pa.setOnInsertListener(Main.this);
-                        recycler_view.setAdapter(pa);
+                        Gif_Adapter gif_adapter = new Gif_Adapter(this, response.body().getData());
+                        gif_adapter.setOnInsertListener(Main.this);
+                        recycler_view.setAdapter(gif_adapter);
+
                     }
 
                     @Override
@@ -98,7 +104,7 @@ public class Main
                 });
             }
         };
-        button_from_online.setOnClickListener(clbto);
+        button_from_online.setOnClickListener(click_button_load_online);
     }
 
 
