@@ -104,10 +104,9 @@ public class Main
                     public void onResponse(Call<API_Response> call, Response<API_Response> response) {
                         assert response.body() != null;
                         list = response.body().getData();
-                        gif_adapter = new Gif_Adapter( response.body().getData());
+                        gif_adapter = new Gif_Adapter(list);
                         gif_adapter.setOnInsertListener(Main.this);
                         recycler_view.setAdapter(gif_adapter);
-
                     }
 
                     @Override
