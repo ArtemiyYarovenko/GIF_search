@@ -81,7 +81,7 @@ public class Gif_Adapter
                 @Override
                 public void onClick(View view) {
                     onInsertListener.onInsert(values.get(ViewHolder.this.getAdapterPosition()));
-                    Toast toast = Toast.makeText(view.getContext(), "Загруженко в БД", LENGTH_SHORT);
+                    Toast toast = Toast.makeText(view.getContext(), "Загружено в БД", LENGTH_SHORT);
                     toast.show();
                 }
             });
