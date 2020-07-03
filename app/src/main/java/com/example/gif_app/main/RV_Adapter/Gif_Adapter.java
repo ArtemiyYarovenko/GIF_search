@@ -1,14 +1,16 @@
 package com.example.gif_app.main.RV_Adapter;
 
+
 import androidx.recyclerview.widget.RecyclerView;
-import android.util.Log;
+
+import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.Toast;
 import com.Object.Datum;
 import com.bumptech.glide.Glide;
+
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.gif_app.R;
 
@@ -23,10 +25,12 @@ import static android.widget.Toast.LENGTH_SHORT;
 
 public class Gif_Adapter
         extends RecyclerView.Adapter <Gif_Adapter.ViewHolder>{
+    private final Activity Parent;
     private final List<Datum> values;
     private OnInsertListener onInsertListener;
 
-    public Gif_Adapter(List<Datum> items) {
+    public Gif_Adapter(Activity parent, List<Datum> items) {
+        Parent = parent;
         values = items;
     }
 

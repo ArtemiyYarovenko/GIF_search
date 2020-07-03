@@ -1,5 +1,6 @@
 package com.example.gif_app.main;
 
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,7 +14,6 @@ import android.widget.EditText;
 
 import com.Object.Datum;
 import com.Object.API_Response;
-import com.bumptech.glide.Glide;
 import com.example.gif_app.R;
 import com.example.gif_app.api.Retrofit_Item;
 import com.example.gif_app.api.Retrofit_Caller;
@@ -43,6 +43,7 @@ public class Main
     Retrofit retrofit;
     private List<Datum> list;
 
+
     RecyclerView recycler_view;
     private GIF_DB DataBase;
     private EditText search_keyword;
@@ -60,19 +61,13 @@ public class Main
         button_from_online = findViewById(R.id.load_online);
         search_keyword = findViewById(R.id.search_input);
         recycler_view = findViewById(R.id.recycler_view_main);
-
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, SpanCount);
         gridLayoutManager.setItemPrefetchEnabled(true);
         gridLayoutManager.setInitialPrefetchItemCount(6);
-
-
         recycler_view.setLayoutManager(gridLayoutManager);
-
         DataBase = GIF_DB.getDatabase(this);
         retrofit = Retrofit_Item.getRetrofit();
-
 
         View.OnClickListener click_button_load_db = new View.OnClickListener() {
             @Override
@@ -81,7 +76,6 @@ public class Main
                 recycler_view.setAdapter(recycler_view_adapter);
             }
         };
-
         button_from_database.setOnClickListener(click_button_load_db);
 
 
@@ -105,7 +99,7 @@ public class Main
                     public void onResponse(Call<API_Response> call, Response<API_Response> response) {
                         assert response.body() != null;
                         list = response.body().getData();
-                        gif_adapter = new Gif_Adapter(list);
+                        gif_adapter = new Gif_Adapter(Main.this,list);
                         gif_adapter.setOnInsertListener(Main.this);
                         recycler_view.setAdapter(gif_adapter);
                     }
@@ -116,13 +110,17 @@ public class Main
                 });
     }
 
-
     @Override
     public void onInsert(Datum datum) {
         DataBase.getGifDao().insertGif(datum);
     }
 
-    //Хотел подумать насчет intenta, чтобы при перевороте на ландшафтный дизайн перезагружались загруженные gif-ки,
-    //но потом подумал насчет разных устройств и специфики отображения на них, так как в Object есть куча форматов
-    //под разные разрешения (фиксированная длина/ширина, сжатые, полноразмерные, mp4 формат есть(для лучшего качества) и т.д.
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
 }
