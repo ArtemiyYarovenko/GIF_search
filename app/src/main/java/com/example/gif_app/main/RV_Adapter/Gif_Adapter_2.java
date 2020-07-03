@@ -39,8 +39,16 @@ public class Gif_Adapter_2
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         String s;
-        s = values.get(position).getImages().getFixedHeight().getUrl();
-        Glide.with(holder.image.getContext()).asGif().load(s).into(holder.image);
+        s = values
+                .get(position)
+                .getImages()
+                .getFixedHeight()
+                .getUrl();
+        Glide
+                .with(holder.image.getContext())
+                .asGif()
+                .load(s)
+                .into(holder.image);
         holder.itemView.setTag(values.get(position));
     }
 
@@ -64,6 +72,10 @@ public class Gif_Adapter_2
             super(view);
             image = view.findViewById(R.id.gif_view);
         }
+    }
+
+    public List<Datum> getitems() {
+        return values;
     }
 
 }

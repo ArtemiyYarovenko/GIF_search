@@ -3,25 +3,29 @@ package com.example.gif_app.main;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.Object.Datum;
 import com.Object.API_Response;
+import com.Object.Images;
 import com.example.gif_app.R;
 import com.example.gif_app.api.Retrofit_Item;
 import com.example.gif_app.api.Retrofit_Caller;
 import com.example.gif_app.DataBase.GIF_DB;
 import com.example.gif_app.main.RV_Adapter.Gif_Adapter;
 import com.example.gif_app.main.RV_Adapter.Gif_Adapter_2;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 import retrofit2.Call;
@@ -41,15 +45,18 @@ public class Main
     String offset = "0";
     int SpanCount = 2;
     Retrofit retrofit;
-    private List<Datum> list;
 
-
+    private final String KEY_RECYCLER_STATE = "recycler_state";
+    private static Bundle BundleRecyclerViewState;
     RecyclerView recycler_view;
     private GIF_DB DataBase;
     private EditText search_keyword;
     Button button_from_database;
     Button button_from_online;
     Gif_Adapter gif_adapter;
+    GridLayoutManager gridLayoutManager;
+    List<Datum> provided_values;
+    Type itemsListType = new TypeToken<List<Datum>>() {}.getType();
 
 
     @Override
@@ -61,18 +68,29 @@ public class Main
         button_from_online = findViewById(R.id.load_online);
         search_keyword = findViewById(R.id.search_input);
         recycler_view = findViewById(R.id.recycler_view_main);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, SpanCount);
+
+        gridLayoutManager = new GridLayoutManager(this, SpanCount);
         gridLayoutManager.setItemPrefetchEnabled(true);
         gridLayoutManager.setInitialPrefetchItemCount(6);
         recycler_view.setLayoutManager(gridLayoutManager);
         DataBase = GIF_DB.getDatabase(this);
         retrofit = Retrofit_Item.getRetrofit();
 
+        if(savedInstanceState !=null) {
+            String string = savedInstanceState.getString("zip_data");
+            Gson gson = new Gson();
+            provided_values = gson.fromJson(string, itemsListType);
+
+            Gif_Adapter gif_adapter = new Gif_Adapter(this, provided_values);
+            recycler_view.setAdapter(gif_adapter);
+        }
+
+
         View.OnClickListener click_button_load_db = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Gif_Adapter_2 recycler_view_adapter = new Gif_Adapter_2(this, DataBase.getGifDao().LoadAll());
+                provided_values = DataBase.getGifDao().LoadAll();
+                Gif_Adapter_2 recycler_view_adapter = new Gif_Adapter_2(this, provided_values);
                 recycler_view.setAdapter(recycler_view_adapter);
             }
         };
@@ -90,6 +108,14 @@ public class Main
         button_from_online.setOnClickListener(click_button_load_online);
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        Gson gson = new Gson();
+        String string = gson.toJson(provided_values);
+        savedInstanceState.putString("zip_data", string);
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
     public void make_call(String q) {
         retrofit.create(Retrofit_Caller.class)
                 .getSearchPhotos(api_key, q, limit, offset, rating)
@@ -98,8 +124,8 @@ public class Main
                     @Override
                     public void onResponse(Call<API_Response> call, Response<API_Response> response) {
                         assert response.body() != null;
-                        list = response.body().getData();
-                        gif_adapter = new Gif_Adapter(Main.this,list);
+                        provided_values = response.body().getData();
+                        gif_adapter = new Gif_Adapter(Main.this,provided_values);
                         gif_adapter.setOnInsertListener(Main.this);
                         recycler_view.setAdapter(gif_adapter);
                     }
@@ -115,12 +141,5 @@ public class Main
         DataBase.getGifDao().insertGif(datum);
     }
 
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-    }
-
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
 
 }

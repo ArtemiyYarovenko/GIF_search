@@ -88,4 +88,8 @@ public class Gif_Adapter
         }
     }
 
+    public List<Datum> getitems() {
+        return values;
+    }
+
 }
