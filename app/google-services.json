@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "290461236205",
+    "firebase_url": "https://gif-search-545d6.firebaseio.com",
+    "project_id": "gif-search-545d6",
+    "storage_bucket": "gif-search-545d6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:290461236205:android:9e712925e4ade11b8cc5e4",
+        "android_client_info": {
+          "package_name": "com.example.gif_search"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "290461236205-bdu9nrk0513hpv16ii0h3kv4hud95m8u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDw7tUKr0pIlXqnbfnObVk2QHniN48-nWw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "290461236205-bdu9nrk0513hpv16ii0h3kv4hud95m8u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
