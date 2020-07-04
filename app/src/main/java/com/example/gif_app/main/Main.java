@@ -47,7 +47,6 @@ public class Main
     Retrofit retrofit;
 
     private final String KEY_RECYCLER_STATE = "recycler_state";
-    private static Bundle BundleRecyclerViewState;
     RecyclerView recycler_view;
     private GIF_DB DataBase;
     private EditText search_keyword;
@@ -77,6 +76,7 @@ public class Main
         DataBase = GIF_DB.getDatabase(this);
         retrofit = Retrofit_Item.getRetrofit();
 
+        //возращение состояния ресайклер вью
         if(savedInstanceState !=null) {
             String string = savedInstanceState.getString("zip_data");
             Gson gson = new Gson();
